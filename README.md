@@ -1,51 +1,54 @@
-# MySocial Backend - Golang Implementation (Learning Branch)
+# MySocial Backend - Node.js Implementation (Learning Branch)
 
-> 🎓 **Learning Project**: This branch is for implementing the MySocial social media backend in Golang.
+> 🎓 **Learning Project**: This branch is for learning backend development by implementing MySocial in Node.js/TypeScript from scratch.
 >
 > **Branch Strategy**:
-> - `main` - Golang implementation (this branch - in progress)
-> - `node-master-onprogress` - Node.js/TypeScript implementation
+> - `node-master-onprogress` - Node.js/TypeScript implementation (this branch - starting from scratch)
+> - `main` - Golang implementation (planned)
 > - `node-main` - Complete Node.js reference implementation
 
 ---
 
 ## Project Overview
 
-MySocial Backend is a production-ready, full-featured real-time social media backend application. This branch will implement it using **Golang** (Go 1.21+) with modern Go patterns and best practices.
+MySocial Backend is a production-ready, full-featured real-time social media backend application. This branch is for implementing it from scratch using **Node.js** and **TypeScript** with modern patterns and best practices.
 
 ### Learning Goals
 
 This implementation will cover:
-- ✅ REST API development with Go
-- ✅ Real-time WebSocket communication
-- ✅ MongoDB integration with Go drivers
+- ✅ REST API development with Express.js
+- ✅ Real-time WebSocket communication (Socket.IO)
+- ✅ MongoDB integration with Mongoose ODM
 - ✅ Redis caching strategies
-- ✅ Concurrent job processing
+- ✅ Async job processing with Bull queues
 - ✅ JWT authentication
-- ✅ Clean architecture patterns
-- ✅ Testing in Go
-- ✅ Docker containerization
+- ✅ TypeScript patterns and best practices
+- ✅ Testing with Jest
+- ✅ Docker containerization and AWS deployment
 
 ---
 
-## Planned Technology Stack
+## Technology Stack
 
 ### Core Technologies
-- **Runtime**: Go 1.21+
-- **Web Framework**: Gin or Fiber
-- **Database**: MongoDB
+- **Runtime**: Node.js 16+
+- **Language**: TypeScript 4.9+
+- **Web Framework**: Express.js
+- **Database**: MongoDB (with Mongoose)
 - **Cache**: Redis
-- **Real-time**: Gorilla WebSocket or Socket.IO Go
-- **Queue**: Asynq (Redis-based) or RabbitMQ
-- **Authentication**: JWT with Go libraries
+- **Real-time**: Socket.IO
+- **Queue**: Bull / BullMQ
+- **Authentication**: JWT with cookie-session
 
 ### Additional Tools
-- **File Upload**: Cloudinary Go SDK
-- **Email**: SendGrid Go SDK
-- **Testing**: Go testing framework + testify
-- **Logging**: Zerolog or Zap
-- **Config**: Viper
-- **Docker**: Multi-stage builds
+- **File Upload**: Cloudinary SDK
+- **Email**: SendGrid (production) + Nodemailer (development)
+- **Testing**: Jest + ts-jest
+- **Logging**: Bunyan
+- **Validation**: Joi
+- **Process Manager**: PM2
+- **CI/CD**: CircleCI
+- **Infrastructure**: Terraform (AWS)
 
 ---
 
@@ -56,7 +59,7 @@ Based on the Node.js reference implementation:
 ### Core Features
 1. **Authentication**
    - Signup/Signin with JWT
-   - Password reset flow
+   - Password reset flow with email
    - Session management
 
 2. **User Management**
@@ -67,13 +70,13 @@ Based on the Node.js reference implementation:
 3. **Posts**
    - Create, read, update, delete posts
    - Image/video upload support
-   - Post reactions (6 types)
+   - Post reactions (6 types: like, love, happy, wow, sad, angry)
    - Comments system
 
 4. **Social Features**
    - Follow/unfollow users
    - Block/unblock users
-   - Follower lists
+   - Follower/following lists
 
 5. **Real-time Chat**
    - Direct messaging
@@ -84,39 +87,41 @@ Based on the Node.js reference implementation:
 6. **Notifications**
    - In-app notifications
    - Email notifications
-   - Push notifications (optional)
 
 7. **Media Upload**
    - Profile images
    - Background images
-   - Post images/videos
+   - Post images/videos via Cloudinary
 
 ---
 
 ## Architecture Overview
 
-The Golang implementation will follow Clean Architecture principles:
+The Node.js implementation will follow a feature-based modular architecture:
 
 ```
 mysocial-backend/
-├── cmd/
-│   └── api/              # Application entry point
-├── internal/
-│   ├── domain/           # Business entities
-│   ├── usecase/          # Business logic
-│   ├── repository/       # Data access layer
-│   ├── handler/          # HTTP handlers
-│   ├── middleware/       # HTTP middleware
-│   └── websocket/        # WebSocket handlers
-├── pkg/
-│   ├── cache/            # Redis cache
-│   ├── queue/            # Job queue
-│   ├── auth/             # Authentication
-│   ├── email/            # Email service
-│   └── upload/           # File upload
-├── config/               # Configuration
-├── migrations/           # Database migrations
-└── docs/                 # Documentation
+├── src/
+│   ├── features/         # Feature modules
+│   │   ├── auth/        # Authentication
+│   │   ├── user/        # User management
+│   │   ├── post/        # Posts
+│   │   ├── reactions/   # Reactions
+│   │   ├── comments/    # Comments
+│   │   ├── followers/   # Social graph
+│   │   ├── chat/        # Messaging
+│   │   ├── images/      # Images
+│   │   └── notifications/ # Notifications
+│   ├── shared/
+│   │   ├── globals/     # Helpers, middleware
+│   │   ├── services/    # DB, Cache, Queue services
+│   │   ├── sockets/     # Socket.IO handlers
+│   │   └── workers/     # Queue workers
+│   ├── app.ts           # Entry point
+│   ├── config.ts        # Configuration
+│   ├── routes.ts        # Route aggregation
+│   └── setupServer.ts   # Server setup
+└── docs/                # Documentation
 ```
 
 ---
@@ -125,28 +130,32 @@ mysocial-backend/
 
 ### Prerequisites
 
-- Go 1.21 or higher
+- Node.js 16+ or higher
 - MongoDB 5.0+
 - Redis 7.0+
+- Cloudinary account (free tier)
 - Docker (optional)
 
 ### Setup Instructions
 
 ```bash
 # Clone the repository
-git clone -b main git@github.com:kyimmQ/mysocial-backend.git
+git clone -b node-master-onprogress git@github.com:kyimmQ/mysocial-backend.git
 cd mysocial-backend
 
 # Install dependencies
-go mod download
+npm install
 
 # Copy environment file
-cp .env.example .env
+cp .env.development.example .env
 
 # Update .env with your credentials
+# DATABASE_URL, REDIS_HOST, CLOUD_NAME, etc.
 
-# Run the application
-go run cmd/api/main.go
+# Run development server
+npm run dev
+
+# Server runs on http://localhost:5000
 ```
 
 ---
@@ -154,66 +163,75 @@ go run cmd/api/main.go
 ## Development Roadmap
 
 ### Phase 1: Foundation (Week 1-2)
-- [ ] Project structure setup
-- [ ] Configuration management (Viper)
-- [ ] MongoDB connection
+- [ ] Project structure setup with TypeScript
+- [ ] Configuration management
+- [ ] MongoDB connection (Mongoose)
 - [ ] Redis connection
-- [ ] HTTP server with Gin/Fiber
-- [ ] Logging setup (Zerolog)
+- [ ] Express server setup
+- [ ] Logging setup (Bunyan)
 - [ ] Error handling middleware
+- [ ] Security middleware (Helmet, CORS, HPP)
 
 ### Phase 2: Authentication (Week 3-4)
-- [ ] User model and repository
-- [ ] Signup endpoint
-- [ ] Login endpoint
+- [ ] User and Auth models (Mongoose schemas)
+- [ ] Signup controller with validation (Joi)
+- [ ] Login controller
 - [ ] JWT middleware
-- [ ] Password hashing (bcrypt)
-- [ ] Password reset flow
+- [ ] Password hashing (bcryptjs)
+- [ ] Password reset flow with email
+- [ ] Session management
 
 ### Phase 3: Core Features (Week 5-8)
 - [ ] Post CRUD operations
-- [ ] Reaction system
+- [ ] Post validation schemas
+- [ ] Reaction system (6 types)
 - [ ] Comment system
 - [ ] User profile management
 - [ ] Image upload (Cloudinary)
+- [ ] Cache services (Redis)
+- [ ] Queue setup (Bull)
 
 ### Phase 4: Social Features (Week 9-10)
-- [ ] Follow/unfollow
-- [ ] Block/unblock
-- [ ] Follower lists
-- [ ] User search
+- [ ] Follow/unfollow logic
+- [ ] Block/unblock users
+- [ ] Follower/following lists
+- [ ] User search with regex
+- [ ] Random user suggestions
 
 ### Phase 5: Real-time Features (Week 11-12)
-- [ ] WebSocket setup
+- [ ] Socket.IO setup with Redis adapter
 - [ ] Chat messaging
 - [ ] Message reactions
+- [ ] Read receipts
 - [ ] Typing indicators
-- [ ] Online status
+- [ ] Online user tracking
 
 ### Phase 6: Advanced Features (Week 13-14)
 - [ ] Notification system
-- [ ] Email notifications
-- [ ] Background jobs (Asynq)
-- [ ] Caching strategy
-- [ ] API rate limiting
+- [ ] Email notifications (SendGrid/Nodemailer)
+- [ ] Background workers
+- [ ] Complete caching strategy
+- [ ] Bull Board UI
+- [ ] API monitoring
 
 ### Phase 7: Testing & Deployment (Week 15-16)
-- [ ] Unit tests
-- [ ] Integration tests
+- [ ] Unit tests (Jest)
+- [ ] Controller tests
+- [ ] Service tests
 - [ ] Docker containerization
-- [ ] CI/CD pipeline
-- [ ] API documentation (Swagger)
+- [ ] CI/CD pipeline (CircleCI)
+- [ ] AWS deployment (Terraform)
 
 ---
 
 ## Documentation
 
-This repository includes comprehensive documentation from the Node.js implementation:
+This repository includes comprehensive documentation:
 
 - [Project Overview & PDR](./docs/project-overview-pdr.md)
 - [System Architecture](./docs/system-architecture.md)
 - [Codebase Summary](./docs/codebase-summary.md)
-- [Code Standards](./docs/code-standards.md) (adapt for Go)
+- [Code Standards](./docs/code-standards.md)
 - [Caching Architecture](./docs/architecture/caching.md)
 - [Queue Architecture](./docs/architecture/queues.md)
 - [Project Roadmap](./docs/project-roadmap.md)
@@ -222,17 +240,29 @@ This repository includes comprehensive documentation from the Node.js implementa
 
 ## Resources
 
-### Go Learning Resources
-- [Go by Example](https://gobyexample.com/)
-- [Effective Go](https://go.dev/doc/effective_go)
-- [Go Web Examples](https://gowebexamples.com/)
+### Node.js/TypeScript Learning Resources
+- [Node.js Documentation](https://nodejs.org/docs)
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/intro.html)
+- [Express.js Guide](https://expressjs.com/en/guide/routing.html)
 
-### Libraries & Frameworks
-- [Gin Web Framework](https://github.com/gin-gonic/gin)
-- [Fiber Framework](https://github.com/gofiber/fiber)
-- [MongoDB Go Driver](https://github.com/mongodb/mongo-go-driver)
-- [Redis Go Client](https://github.com/redis/go-redis)
-- [Asynq Job Queue](https://github.com/hibiken/asynq)
+### Key Libraries
+- [Express.js](https://expressjs.com/) - Web framework
+- [Mongoose](https://mongoosejs.com/) - MongoDB ODM
+- [Socket.IO](https://socket.io/docs/v4/) - Real-time communication
+- [Bull](https://github.com/OptimalBits/bull) - Queue system
+- [Jest](https://jestjs.io/) - Testing framework
+- [Joi](https://joi.dev/) - Validation
+
+---
+
+## Reference Implementation
+
+The complete Node.js/TypeScript implementation is available in the `node-main` branch for reference.
+
+To see the complete implementation:
+```bash
+git checkout node-main
+```
 
 ---
 
@@ -242,12 +272,6 @@ This is a personal learning project. Feel free to:
 - Fork and implement your own version
 - Submit issues for questions
 - Share improvements and suggestions
-
----
-
-## Reference Implementation
-
-The complete Node.js/TypeScript implementation is available in the `node-main` branch for reference.
 
 ---
 
