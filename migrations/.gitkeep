@@ -1,0 +1,3 @@
+# SQL migration files placeholder
+# Place .sql migration files here (e.g., 001_create_users.up.sql).
+# For MongoDB, this folder can hold JSON seed data or migration scripts.
