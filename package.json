@@ -1,0 +1,27 @@
+{
+  "name": "mysocial-backend",
+  "version": "1.0.0",
+  "description": "> 🎓 **Learning Project**: This branch is for learning backend development by implementing MySocial in Node.js/TypeScript from scratch. > > **Branch Strategy**: > - `node-master-onprogress` - Node.js/TypeScript implementation (this branch - starting from scratch) > - `main` - Golang implementation (planned) > - `node-main` - Complete Node.js reference implementation",
+  "main": "app.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kyimmQ/mysocial-backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/kyimmQ/mysocial-backend/issues"
+  },
+  "homepage": "https://github.com/kyimmQ/mysocial-backend#readme",
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}
